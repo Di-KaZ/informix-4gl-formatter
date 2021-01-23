@@ -10,6 +10,8 @@ Ugly isnt it ? 🤔
 ### Condition flag enabled
 ![](img/preview_condition.png)
 ℹ I find the condition flag particuly handy has it permmit to just select the commented part and easily find the matching part and the block contained in it.
+Combined with an tab highlighter (like indent rainbow),
+everything looks Far more readable
 
 ### Number flag enabled
 ![](img/preview_number.png)
