@@ -1,13 +1,17 @@
 # Moussed's Informix 4gl Formatter
 
-An informix 4gl formatter (indentation) with some extra feature
+An informix 4gl formatter made in TypeScript that correct indentation with some extra features
 
 ## Preview :
+### Before
+![](img/preview_not_formatted.png)
 
+### Condition flag enabled
+![](img/preview_condition.png)
 
-|Before|condition flag enabled|number flag enabled|
-|:-:|:-:|:-:|
-|![](img/preview_not_formatted.png)|![](img/preview_condition.png)|![](img/preview_number.png)|
+### Number flag enabled
+![](img/preview_number.png)
+⚠ number mode is not really acurate atm. I work on a better implementation
 
 I find the condition flag particuly handy has it permmit to just select the commented part and easily find the matching part and the block contained in it.
 ## Usage
