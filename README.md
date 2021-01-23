@@ -27,7 +27,7 @@ everything looks Far more readable
 |-f \|\| -d | ❌ | no default | (filepath) or  (dirpath)|
 |-i| ✔ |'\\t' | string to use as indentation|
 |-o| ✔ |current dir| directory where to output files
-|-l (none \|\| condition \|\| number || line)| ✔ |condition | Identation mode to use |
+|-l (none \|\| condition \|\| number \|\| line)| ✔ |condition | Identation mode to use |
 
 # Modes
 - **none** display nothing
