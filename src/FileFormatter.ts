@@ -149,6 +149,7 @@ export class FileFormatter {
         this._current_line_index += 1
         line = this._lines[this._current_line_index]
       }
+      this._out_file_lines.push(line)
       return
     }
 
