@@ -7,6 +7,9 @@ An informix 4gl formatter made in TypeScript that correct indentation with some 
 ![](img/preview_not_formatted.png)
 Ugly isnt it ? 🤔
 
+### Line flag enabled
+![](img/preview_line.png)
+*neaaaaat*
 ### Condition flag enabled
 ![](img/preview_condition.png)
 ℹ I find the condition flag particuly handy has it permmit to just select the commented part and easily find the matching part and the block contained in it.
@@ -24,12 +27,13 @@ everything looks Far more readable
 |-f \|\| -d | ❌ | no default | (filepath) or  (dirpath)|
 |-i| ✔ |'\\t' | string to use as indentation|
 |-o| ✔ |current dir| directory where to output files
-|-l (none \|\| condition \|\| number)| ✔ |condition | Identation mode to use |
+|-l (none \|\| condition \|\| number || line)| ✔ |condition | Identation mode to use |
 
 # Modes
 - **none** display nothing
 - **condition** display the first 40 char of the opening statement on the mathching intermediate & end statement
-- **number** display the inner depth of the opening statement on the mathchingintermediate && end statement
+- **number** display the inner depth of the opening statement on the mathching intermediate && end statement
+- **line** display line of the opening statement on the mathching intermediate && end statement
 
 # [Download it ! 😎](https://github.com/Di-KaZ/informix-4gl-formatter/releases/tag/0.0.7)
 

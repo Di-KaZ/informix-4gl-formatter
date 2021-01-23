@@ -110,20 +110,30 @@ export class FileFormatter {
             .join('.') +
           ' }',
       )
+      return line + this._if_stack.slice(-1)[0]
     }
-    return line + this._if_stack.slice(-1)[0]
+    return line
+  }
+
+  private modeLine(line: string): string {
+    if (this._indent_mode === IndentMode.MODE_LINE) {
+      this._if_stack.push(`  { Match Line ${this._current_line_index + 1} }`)
+      return line + this._if_stack.slice(-1)[0]
+    }
+    return line
   }
 
   private manageIfStack(line: string): string {
     if (TOKENS.PUSH_IF_STACK.test(line)) {
       line = this.modeCondition(line)
       line = this.modeNumber(line)
+      line = this.modeLine(line)
     }
-    if (TOKENS.PRINT_LIBL_STACK.test(line)) {
+    if (TOKENS.PRINT_LIBL_STACK.test(line) && this._if_stack.length !== 0) {
       return line + this._if_stack.slice(-1)[0]
     }
 
-    if (TOKENS.POP_IF_STACK.test(line)) {
+    if (TOKENS.POP_IF_STACK.test(line) && this._if_stack.length !== 0) {
       return line + this._if_stack.pop()
     }
     return line
@@ -156,7 +166,9 @@ export class FileFormatter {
     // if not empty or a comment //
     // delete before and after space to clean up indentation and search token from start of string
     line = line.trim()
-    line = this.manageIfStack(line)
+    if (this._indent_mode !== IndentMode.MODE_NONE) {
+      line = this.manageIfStack(line)
+    }
 
     // check if we have to decrement indentation
     if (TOKENS.DECREMENT_STATEMENT.test(line)) {

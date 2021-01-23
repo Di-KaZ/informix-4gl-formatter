@@ -7,6 +7,7 @@ export enum IndentMode {
   MODE_CONDITION = 'condition',
   MODE_NUMBER = 'number',
   MODE_NONE = 'none',
+  MODE_LINE = 'line',
 }
 // TODO adapt it to minimist interface, here just to know what arguments do
 export interface Options {
