@@ -5,23 +5,24 @@ An informix 4gl formatter made in TypeScript that correct indentation with some 
 ## Preview :
 ### Before
 ![](img/preview_not_formatted.png)
+Ugly isnt it ? 🤔
 
 ### Condition flag enabled
 ![](img/preview_condition.png)
+ℹ I find the condition flag particuly handy has it permmit to just select the commented part and easily find the matching part and the block contained in it.
 
 ### Number flag enabled
 ![](img/preview_number.png)
 ⚠ number mode is not really acurate atm. I work on a better implementation
 
-I find the condition flag particuly handy has it permmit to just select the commented part and easily find the matching part and the block contained in it.
 ## Usage
 
 |Flag|Optinal ?| Default| Description|
 |:-:|:-:|:-:|:-:|
-|-f \|\| -d | no | no default | (filepath) or  (dirpath)|
-|-i| yes |'\\t' | string to use as indentation|
-|-o| yes |current dir| directory where to output files
-|-l (none \|\| condition \|\| number)| yes |condition | Identation mode to use |
+|-f \|\| -d | ❌ | no default | (filepath) or  (dirpath)|
+|-i| ✔ |'\\t' | string to use as indentation|
+|-o| ✔ |current dir| directory where to output files
+|-l (none \|\| condition \|\| number)| ✔ |condition | Identation mode to use |
 
 # Modes
 - **none** display nothing
