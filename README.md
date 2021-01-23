@@ -29,7 +29,7 @@ Ugly isnt it ? 🤔
 - **condition** display the first 40 char of the opening statement on the mathching intermediate & end statement
 - **number** display the inner depth of the opening statement on the mathchingintermediate && end statement
 
-# [Download it ! 😎](#)
+# [Download it ! 😎](https://github.com/Di-KaZ/informix-4gl-formatter/releases/tag/0.0.7)
 
 
 # If you want compile from source
