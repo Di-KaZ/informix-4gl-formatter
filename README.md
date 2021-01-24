@@ -29,7 +29,7 @@ everything looks Far more readable
 
 ## Usage
 
-|                      Flag                      |        long ver         | Optinal ? |   Default   |           Description           |
+|                      Flag                      |        long ver         | Optional ? |   Default   |           Description           |
 | :--------------------------------------------: | :---------------------: | :-------: | :---------: | :-----------------------------: |
 |                   -f \|\| -d                   | --file \|\| --directory |    ❌     | no default  |     (filepath) or (dirpath)     |
 |                       -i                       |        --indent         |     ✔     |    '\\t'    |  string to use as indentation   |
