@@ -2,6 +2,7 @@
 ![banner](img/ifx-4gl-formatter.png)
 An informix 4gl formatter made in TypeScript that correct indentation with some extra features
 
+> Checkout the extention for vscode [**here**](https://github.com/Di-KaZ/vscode-4gl-formatter/)
 ## Preview :
 
 ### Before
