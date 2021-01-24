@@ -50,7 +50,7 @@ export const COLORS: Colors = {
   BGWHITE: '\x1b[47m',
 }
 
-const version = '0.0.7'
+const version = '0.1.0'
 
 export const FORMATTED_EXT = '-formatted.4gl'
 
@@ -75,5 +75,10 @@ export class Printer {
   // same here 😎
   public static error(msg: string): void {
     console.error(`${COLORS.FGRED}[ERROR] ${COLORS.RESET} ${msg}`)
+  }
+
+  // ...
+  public static warn(msg: string): void {
+    console.warn(`${COLORS.FGYELLOW}[WARN]${COLORS.RESET} ${msg}`)
   }
 }

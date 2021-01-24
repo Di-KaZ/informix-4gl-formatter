@@ -1,6 +1,7 @@
 import fs from 'fs'
 import * as Path from 'path'
 import { IndentMode, options } from './app'
+import { FileStack } from './FileStack'
 import { COLORS, FORMATTED_EXT, Printer } from './Utils'
 
 interface Tokens {
@@ -14,9 +15,9 @@ interface Tokens {
   // token that reset indentation
   RESET_STATEMENT: RegExp
   // token that push a condition libl in stack
-  PUSH_IF_STACK: RegExp
+  PUSH_STACK: RegExp
   // token that pop condition libl in stack
-  POP_IF_STACK: RegExp
+  POP_STACK: RegExp
   PRINT_LIBL_STACK: RegExp
 }
 
@@ -27,8 +28,8 @@ const TOKENS: Tokens = {
   INCREMENT_STATEMENT: /^MAIN\b|^IF\b|^ELSE\b|^CASE\b|^WHEN\b|^FOR\b|^FUNCTION\b|^WHILE\b|^FOREACH\b/i,
   DECREMENT_STATEMENT: /^ELSE\b|^END\b|^WHEN\b/i,
   RESET_STATEMENT: /^MAIN\b|^FUNCTION\b|^RECORD\b/i,
-  PUSH_IF_STACK: /^IF\b/i,
-  POP_IF_STACK: /^END IF\b/i,
+  PUSH_STACK: /^IF\b/i,
+  POP_STACK: /^END IF\b/i,
   PRINT_LIBL_STACK: /^ELSE\b/i,
 }
 
@@ -41,7 +42,7 @@ export class FileFormatter {
 
   private _current_line_index: number // current line that we are formatting
   private _indent_level: number // current indentation depth
-  private _if_stack: string[] // trace stack if lib
+  private _stack: FileStack
 
   /**
    * Create a file instance
@@ -56,7 +57,7 @@ export class FileFormatter {
     this._current_line_index = 0
     this._out_file_lines = []
     this._indent_level = 0
-    this._if_stack = []
+    this._stack = new FileStack()
   }
 
   /**
@@ -78,6 +79,8 @@ export class FileFormatter {
       this.processLine()
       this._current_line_index += 1
     }
+    // check if errors in file are detected by the stack\
+    this._stack.checkStackStatus()
     // print formatted lines in out file
     fs.writeFileSync(this._out_file_path, this._out_file_lines.join('\n'), { encoding: 'latin1' })
     Printer.info(
@@ -87,47 +90,24 @@ export class FileFormatter {
     )
   }
 
-  private modeCondition(line: string): string {
-    if (options.mode === IndentMode.MODE_CONDITION) {
-      this._if_stack.push('  { ' + (line.length > 10 ? line.substr(3, 40) : line.slice(3)) + ' }')
-    }
-    return line
-  }
-
-  private modeNumber(line: string): string {
-    if (options.mode === IndentMode.MODE_NUMBER) {
-      this._if_stack.push(
-        '  { ' +
-          Array.from(Array(this._if_stack.length + 1).keys())
-            .map((val) => val + 1)
-            .join('.') +
-          ' }',
-      )
-      return line + this._if_stack.slice(-1)[0]
-    }
-    return line
-  }
-
-  private modeLine(line: string): string {
-    if (options.mode === IndentMode.MODE_LINE) {
-      this._if_stack.push(`  { Match Line ${this._current_line_index + 1} }`)
-      return line + this._if_stack.slice(-1)[0]
-    }
-    return line
-  }
-
+  /**
+   * check if the like is an opening statement or a closing one to print the comment after
+   * @param line
+   * @returns line + comment
+   */
   private manageIfStack(line: string): string {
-    if (TOKENS.PUSH_IF_STACK.test(line)) {
-      line = this.modeCondition(line)
-      line = this.modeNumber(line)
-      line = this.modeLine(line)
+    // if we found a new nesting token like an if add it to the stack
+    if (TOKENS.PUSH_STACK.test(line)) {
+      this._stack.pushStack(line, this._current_line_index)
+      return line + this._stack.getTopStackComment(this._current_line_index + 1)
     }
-    if (TOKENS.PRINT_LIBL_STACK.test(line) && this._if_stack.length !== 0) {
-      return line + this._if_stack.slice(-1)[0]
+    // if it's an intermediate token like an else juste add the comment
+    if (TOKENS.PRINT_LIBL_STACK.test(line)) {
+      return line + this._stack.getTopStackComment(this._current_line_index + 1)
     }
-
-    if (TOKENS.POP_IF_STACK.test(line) && this._if_stack.length !== 0) {
-      return line + this._if_stack.pop()
+    // if we close the statement pop the stack
+    if (TOKENS.POP_STACK.test(line)) {
+      return line + this._stack.popTopStackComment(this._current_line_index + 1)
     }
     return line
   }
