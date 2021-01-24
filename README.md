@@ -42,7 +42,7 @@ everything looks Far more readable
 - **number** display the inner depth of the opening statement on the mathching intermediate && end statement
 - **line** display line of the opening statement on the mathching intermediate && end statement
 
-# [Download it ! 😎](https://github.com/Di-KaZ/informix-4gl-formatter/releases/tag/0.0.7)
+# [Download it ! 😎](https://github.com/Di-KaZ/informix-4gl-formatter/releases)
 
 # If you want compile from source
 
