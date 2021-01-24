@@ -1,6 +1,6 @@
 import fs from 'fs'
 import * as Path from 'path'
-import { IndentMode } from './app'
+import { IndentMode, options } from './app'
 import { COLORS, FORMATTED_EXT, Printer } from './Utils'
 
 interface Tokens {
@@ -41,12 +41,7 @@ export class FileFormatter {
 
   private _current_line_index: number // current line that we are formatting
   private _indent_level: number // current indentation depth
-
-  private _indent_chars: string // char to be used as indentation
-
   private _if_stack: string[] // trace stack if lib
-
-  private _indent_mode: IndentMode
 
   /**
    * Create a file instance
@@ -54,16 +49,14 @@ export class FileFormatter {
    * @param out_directory
    * @param indent_chars
    */
-  public constructor(base_name: string, out_directory: string, indent_chars: string, flg_indent_libl: IndentMode) {
+  public constructor(base_name: string) {
     this._file_name = base_name
-    this._out_file_path = Path.resolve(out_directory, base_name.replace(/\.[^/.]+$/, FORMATTED_EXT))
+    this._out_file_path = Path.resolve(options.output, base_name.replace(/\.[^/.]+$/, FORMATTED_EXT))
     this._lines = []
     this._current_line_index = 0
     this._out_file_lines = []
     this._indent_level = 0
-    this._indent_chars = indent_chars
     this._if_stack = []
-    this._indent_mode = flg_indent_libl
   }
 
   /**
@@ -95,14 +88,14 @@ export class FileFormatter {
   }
 
   private modeCondition(line: string): string {
-    if (this._indent_mode === IndentMode.MODE_CONDITION) {
+    if (options.mode === IndentMode.MODE_CONDITION) {
       this._if_stack.push('  { ' + (line.length > 10 ? line.substr(3, 40) : line.slice(3)) + ' }')
     }
     return line
   }
 
   private modeNumber(line: string): string {
-    if (this._indent_mode === IndentMode.MODE_NUMBER) {
+    if (options.mode === IndentMode.MODE_NUMBER) {
       this._if_stack.push(
         '  { ' +
           Array.from(Array(this._if_stack.length + 1).keys())
@@ -116,7 +109,7 @@ export class FileFormatter {
   }
 
   private modeLine(line: string): string {
-    if (this._indent_mode === IndentMode.MODE_LINE) {
+    if (options.mode === IndentMode.MODE_LINE) {
       this._if_stack.push(`  { Match Line ${this._current_line_index + 1} }`)
       return line + this._if_stack.slice(-1)[0]
     }
@@ -148,7 +141,7 @@ export class FileFormatter {
 
     // if line is just empty or just a signle line comment print it
     if (TOKENS.EMPTY_LINE_OR_COMMENT.test(line)) {
-      this._out_file_lines.push(this._indent_chars.repeat(this._indent_level) + line.trimLeft())
+      this._out_file_lines.push(options.indent.repeat(this._indent_level) + line.trimLeft())
       return
     }
 
@@ -166,7 +159,7 @@ export class FileFormatter {
     // if not empty or a comment //
     // delete before and after space to clean up indentation and search token from start of string
     line = line.trim()
-    if (this._indent_mode !== IndentMode.MODE_NONE) {
+    if (options.mode !== IndentMode.MODE_NONE) {
       line = this.manageIfStack(line)
     }
 
@@ -183,7 +176,7 @@ export class FileFormatter {
     // TODO LABEL
 
     // output line with indentation
-    this._out_file_lines.push(this._indent_chars.repeat(this._indent_level) + line)
+    this._out_file_lines.push(options.indent.repeat(this._indent_level) + line)
 
     // set indentation fo next line
     if (TOKENS.INCREMENT_STATEMENT.test(line)) {

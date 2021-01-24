@@ -9,32 +9,40 @@ export enum IndentMode {
   MODE_NONE = 'none',
   MODE_LINE = 'line',
 }
-// TODO adapt it to minimist interface, here just to know what arguments do
-export interface Options {
-  f?: string // open signle file (path)
-  d?: string // open whole directory (path)
-  o?: string // output path default current directory
-  h?: string // help
-  i?: string // indent to use default "\t"
-  l?: IndentMode // indentMode to use default CONDITION
-}
+export let options
 
 export default function app(): void {
-  // getting  commandlines arguments
-  const options = minimist(process.argv.slice(2))
+  options = minimist(process.argv.slice(2), {
+    default: {
+      output: '.', // output path default current directory
+      indent: '\t', // indent to use default "\t"
+      mode: IndentMode.MODE_LINE, // indentMode to use default LINE
+    },
+    boolean: ['help'],
+    string: ['file', 'directory', 'output', 'indent', 'mode'],
+    alias: {
+      help: 'h',
+      file: 'f',
+      directory: 'd',
+      output: 'o',
+      indent: 'i',
+      mode: 'm',
+    },
+  }) // global easier to pass args to all the diferrent part
 
+  // getting  commandlines arguments
   if (options.h) {
     console.info(HELP)
     exit(0)
   }
   // Not only one option or no option
-  if ((options.f && options.d) || (!options.f && !options.d)) {
+  if ((options.f === undefined && options.d === undefined) || (options.f && options.d)) {
     console.info(HELP)
     exit(0)
   }
 
   // create Instance of FileOpener
-  const formatter: FileOpener = new FileOpener(options)
+  const formatter: FileOpener = new FileOpener()
 
   // format files
   formatter.format()
