@@ -1,5 +1,5 @@
 # Moussed's Informix 4gl Formatter
-
+![banner](img/ifx-4gl-formatter.png)
 An informix 4gl formatter made in TypeScript that correct indentation with some extra features
 
 ## Preview :
